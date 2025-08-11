@@ -1,0 +1,71 @@
+--INNER JOIN
+/*
+1.List all orders along with the customer’s name who placed them.
+2.Show each order’s ID and the employee who handled it.
+*/
+SELECT * FROM orders;
+SELECT * FROM Customers;
+SELECT o.OrderID,c.CompanyName AS Customer_name 
+FROM Orders o
+INNER JOIN Customers c
+ON o.CustomerID = c.CustomerID;
+
+SELECT o.OrderID, e.FirstName|| ' ' ||e.LastName as EmployeeName
+FROM Orders o
+INNER JOIN Employees e ON o.EmployeeID = e.EmployeeID;
+
+--LEFT JOIN
+/*
+1.List all customers and their orders, including customers with no orders.
+*/
+
+SELECT Customers.CompanyName, Orders.OrderID
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+--RIGHT JOIN
+/*
+1. Fine Territories and employees
+*/
+SELECT Territories.TerritoryDescription, EmployeeTerritories.EmployeeID
+FROM Territories
+Right JOIN EmployeeTerritories ON Territories.TerritoryID = EmployeeTerritories.TerritoryID;
+
+--FULL OUTER JOIN
+--1. Products and suppliers
+SELECT Products.ProductName, Suppliers.CompanyName
+FROM Products
+LEFT JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+UNION
+SELECT Products.ProductName, Suppliers.CompanyName
+FROM Suppliers
+LEFT JOIN Products ON Products.SupplierID = Suppliers.SupplierID;
+
+-- CROSS JOIN
+--1.All combinations of customers and shippers
+SELECT Customers.CompanyName AS CustomerName, Shippers.CompanyName AS ShipperName
+FROM Customers
+CROSS JOIN Shippers;
+
+--NATURAL JOIN
+--1. Employees with orders they handled
+SELECT *
+FROM Employees
+NATURAL JOIN Orders;
+
+-- SELF JOIN
+--1.Employees with the same manager
+SELECT E1.FirstName || ' ' || E1.LastName AS Employee1,
+       E2.FirstName || ' ' || E2.LastName AS Employee2,
+       E1.ReportsTo
+FROM Employees E1
+JOIN Employees E2 ON E1.ReportsTo = E2.ReportsTo
+WHERE E1.EmployeeID < E2.EmployeeID;
+
+--MULTI-TABLE JOIN
+--1.Products with category and supplier
+SELECT Products.ProductName, Categories.CategoryName, Suppliers.CompanyName AS Supplier
+FROM Products
+JOIN Categories ON Products.CategoryID = Categories.CategoryID
+JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID;
+
